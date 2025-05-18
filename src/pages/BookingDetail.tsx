@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, Calendar, Clock, Phone, MessageCircle } from 'lucide-react';
+import { MapPin, Calendar, Clock, Phone, MessageCircle, Star } from 'lucide-react';
 
 export default function BookingDetail() {
   const { id } = useParams<{ id: string }>();
@@ -19,18 +19,18 @@ export default function BookingDetail() {
     status: 'confirmed',
     date: new Date(),
     time: '10:00 AM - 12:00 PM',
-    address: '123 Main Street, Apt 4B, New York, NY 10001',
-    price: '$60.00',
+    address: 'F-123, Sector 22, Noida, Uttar Pradesh, 201301, India',
+    price: '₹1,200.00',
     provider: {
-      name: 'Maria Garcia',
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-      phone: '+1 (555) 123-4567',
+      name: 'Rajesh Kumar',
+      image: 'https://randomuser.me/api/portraits/men/32.jpg',
+      phone: '+91 9876543210',
       rating: 4.9
     }
   };
   
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-IN', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -84,7 +84,7 @@ export default function BookingDetail() {
             />
             
             {/* Booking details */}
-            <Card>
+            <Card className="border-t-4 border-t-brand-blue">
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
                 
@@ -132,13 +132,13 @@ export default function BookingDetail() {
                     <span>{booking.price}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Tax</span>
-                    <span>$5.00</span>
+                    <span>GST (18%)</span>
+                    <span>₹216.00</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-semibold">
                     <span>Total</span>
-                    <span>$65.00</span>
+                    <span>₹1,416.00</span>
                   </div>
                 </div>
               </CardContent>
@@ -147,7 +147,7 @@ export default function BookingDetail() {
           
           {/* Provider info */}
           <div>
-            <Card>
+            <Card className="border-t-4 border-t-brand-blue">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold mb-4">Service Provider</h2>
                 
@@ -159,9 +159,7 @@ export default function BookingDetail() {
                   <div>
                     <p className="font-medium">{booking.provider.name}</p>
                     <div className="flex items-center text-sm">
-                      <svg className="h-4 w-4 text-yellow-400 fill-current mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
-                      </svg>
+                      <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
                       <span>{booking.provider.rating}</span>
                     </div>
                     <p className="text-gray-500 text-sm">
@@ -179,6 +177,21 @@ export default function BookingDetail() {
                   <MessageCircle className="mr-2 h-4 w-4" />
                   Message
                 </Button>
+
+                <div className="mt-4 bg-gray-50 p-3 rounded-md">
+                  <p className="text-sm text-gray-600 mb-1">Service Provider Rating</p>
+                  <div className="flex items-center">
+                    <div className="flex mr-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star 
+                          key={star} 
+                          className={`h-4 w-4 ${star <= Math.floor(booking.provider.rating) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium">{booking.provider.rating}/5</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

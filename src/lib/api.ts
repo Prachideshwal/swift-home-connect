@@ -152,6 +152,38 @@ export const getServiceProviders = async (serviceId: string): Promise<ServicePro
   ];
 };
 
+// Stripe payment integration
+export const createStripeCheckout = async (bookingData: {
+  serviceId: string;
+  providerId: string;
+  date: string;
+  address: string;
+  price: string;
+}): Promise<{ url: string } | null> => {
+  console.log("Creating Stripe checkout session:", bookingData);
+  
+  try {
+    // In a real app, this would make an API call to your backend
+    // For demo purposes, we'll simulate a successful response
+    
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    // Format price for Stripe (remove commas, convert to cents)
+    const priceInPaise = Math.round(parseFloat(bookingData.price.replace(/,/g, '')) * 100);
+    
+    // Mock Stripe checkout URL
+    // In a real app, this would come from your backend after creating a Stripe session
+    return {
+      url: `https://checkout.stripe.com/pay/cs_test_a1${Math.random().toString(36).substring(2, 15)}?amount=${priceInPaise}&currency=inr`
+    };
+  } catch (error) {
+    console.error("Error creating Stripe checkout:", error);
+    toast.error("Failed to create payment session. Please try again.");
+    return null;
+  }
+};
+
 // Book a service
 export const bookService = async (
   serviceId: string,
