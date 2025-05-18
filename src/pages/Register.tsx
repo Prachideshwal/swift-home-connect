@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import Layout from '@/components/Layout';
+import { toast } from '@/components/ui/sonner';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -23,17 +24,23 @@ export default function Register() {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      alert("Passwords don't match!");
+      toast.error("Passwords don't match!");
       return;
     }
     
     setIsSubmitting(true);
     
     try {
+      console.log("Attempting registration with:", { name, email, mobile });
       const success = await register(name, email, password, mobile);
+      
       if (success) {
-        navigate('/login');
+        toast.success("Registration successful! You're now logged in.");
+        navigate('/');
       }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

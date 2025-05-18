@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import Layout from '@/components/Layout';
+import { toast } from '@/components/ui/sonner';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -21,10 +22,19 @@ export default function Login() {
     setIsSubmitting(true);
     
     try {
+      console.log("Attempting login with:", { email, password });
       const success = await login(email, password);
+      
       if (success) {
+        toast.success("Login successful!");
         navigate('/');
+      } else {
+        // This will be handled by the loginUser function in api.ts
+        console.log("Login failed");
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

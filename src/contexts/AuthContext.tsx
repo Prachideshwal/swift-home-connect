@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getCurrentUser, loginUser, registerUser, logoutUser } from '@/lib/api';
+import { toast } from '@/components/ui/sonner';
 
 interface AuthContextType {
   user: { email: string; name: string } | null;
@@ -37,7 +38,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const register = async (name: string, email: string, password: string, mobile: string) => {
-    return await registerUser(name, email, password, mobile);
+    const success = await registerUser(name, email, password, mobile);
+    if (success) {
+      // Auto login after successful registration
+      localStorage.setItem("user", JSON.stringify({ email, name }));
+      setUser({ email, name });
+    }
+    return success;
   };
 
   const logout = () => {
