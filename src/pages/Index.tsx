@@ -6,12 +6,28 @@ import HowItWorks from '@/components/HowItWorks';
 import Testimonials from '@/components/Testimonials';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import FeaturedCarousel from '@/components/FeaturedCarousel';
 
 export default function Index() {
   return (
     <Layout>
       {/* Hero Banner */}
       <Banner />
+      
+      {/* Featured Services Carousel */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold">Featured Services</h2>
+            <Link to="/services">
+              <Button variant="link" className="text-brand-blue">
+                View All
+              </Button>
+            </Link>
+          </div>
+          <FeaturedCarousel />
+        </div>
+      </section>
       
       {/* Services Section */}
       <section className="py-12 md:py-16">

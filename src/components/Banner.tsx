@@ -4,6 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 export default function Banner() {
   const [location, setLocation] = useState('');
@@ -14,6 +19,15 @@ export default function Banner() {
     navigate('/services');
   };
   
+  const serviceCategories = [
+    "Cleaning",
+    "Plumbing",
+    "Electrical",
+    "Painting",
+    "Carpentry",
+    "AC Repair"
+  ];
+  
   return (
     <div className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,8 +36,33 @@ export default function Banner() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               Expert Home Services at Your <span className="text-brand-blue">Fingertips</span>
             </h1>
+            
+            <div className="h-10 overflow-hidden">
+              <Carousel
+                opts={{
+                  loop: true,
+                  skipSnaps: false,
+                  duration: 10
+                }}
+                className="w-full"
+                autoplay={true}
+                loop={true}
+                interval={3000}
+              >
+                <CarouselContent>
+                  {serviceCategories.map((category, i) => (
+                    <CarouselItem key={i} className="basis-full">
+                      <p className="text-lg md:text-xl text-brand-blue font-medium">
+                        Need {category}? We've got you covered.
+                      </p>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+            
             <p className="text-gray-600 text-lg">
-              Book trusted professionals for all your home service needs. From cleaning to repairs, we've got you covered.
+              Book trusted professionals for all your home service needs across India.
             </p>
             
             <form onSubmit={handleSearch} className="flex space-x-2 max-w-md">
@@ -31,7 +70,7 @@ export default function Banner() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <Input 
                   type="text" 
-                  placeholder="Enter your location" 
+                  placeholder="Enter your location in India" 
                   className="pl-10"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -43,7 +82,7 @@ export default function Banner() {
               </Button>
             </form>
             
-            <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 pt-2">
               <div className="flex items-center">
                 <div className="h-4 w-4 rounded-full bg-green-500 mr-1"></div>
                 <span>Verified Experts</span>
@@ -55,6 +94,10 @@ export default function Banner() {
               <div className="flex items-center">
                 <div className="h-4 w-4 rounded-full bg-purple-500 mr-1"></div>
                 <span>24/7 Support</span>
+              </div>
+              <div className="flex items-center">
+                <div className="h-4 w-4 rounded-full bg-yellow-500 mr-1"></div>
+                <span>Cash on Delivery</span>
               </div>
             </div>
           </div>
@@ -74,6 +117,13 @@ export default function Banner() {
                   <p className="text-sm font-semibold">Live Tracking</p>
                   <p className="text-xs text-gray-500">Know exactly when your service provider will arrive</p>
                 </div>
+              </div>
+            </div>
+            
+            <div className="absolute -top-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
+              <div className="text-center">
+                <p className="text-sm font-semibold text-brand-blue">50+</p>
+                <p className="text-xs text-gray-500">Cities in India</p>
               </div>
             </div>
           </div>

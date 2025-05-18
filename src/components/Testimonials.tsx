@@ -1,26 +1,45 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function Testimonials() {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Homeowner",
+      name: "Priya Sharma",
+      role: "Homeowner, Delhi",
       image: "https://randomuser.me/api/portraits/women/23.jpg",
       content: "The cleaning service was excellent! The professionals arrived on time and did a thorough job. My home has never looked better. I'll definitely be using Swift Home Connect again."
     },
     {
-      name: "Michael Brown",
-      role: "Apartment Owner",
+      name: "Rahul Patel",
+      role: "Apartment Owner, Mumbai",
       image: "https://randomuser.me/api/portraits/men/44.jpg",
       content: "The plumber fixed my leaking sink in no time. Very professional and knowledgeable. The live tracking feature was particularly helpful as I knew exactly when they would arrive."
     },
     {
-      name: "Emily Chen",
-      role: "Business Owner",
+      name: "Ananya Singh",
+      role: "Business Owner, Bangalore",
       image: "https://randomuser.me/api/portraits/women/54.jpg",
       content: "We use Swift Home Connect for all our office maintenance needs. The electrician they sent was skilled and efficient. Their booking system is so convenient!"
+    },
+    {
+      name: "Vikram Mehta",
+      role: "Property Manager, Chennai",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      content: "Managing maintenance for multiple properties was a nightmare until I found Swift Home Connect. Now everything is streamlined, from booking to payment. Highly recommended!"
+    },
+    {
+      name: "Divya Kapoor",
+      role: "Homeowner, Pune",
+      image: "https://randomuser.me/api/portraits/women/67.jpg",
+      content: "The AC repair service was prompt and professional. The technician explained everything clearly and fixed the issue quickly. The transparent pricing is what I appreciate the most."
     }
   ];
   
@@ -34,32 +53,46 @@ export default function Testimonials() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-white hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Avatar className="h-12 w-12 border-2 border-brand-blue">
-                    <AvatarImage src={testimonial.image} />
-                    <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="ml-4">
-                    <p className="font-medium">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mt-4">{testimonial.content}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Carousel
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {testimonials.map((testimonial, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                <Card className="bg-white hover:shadow-md transition-shadow h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <Avatar className="h-12 w-12 border-2 border-brand-blue">
+                        <AvatarImage src={testimonial.image} />
+                        <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div className="ml-4">
+                        <p className="font-medium">{testimonial.name}</p>
+                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <p className="text-gray-600 mt-4">{testimonial.content}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-center mt-8">
+            <CarouselPrevious className="mx-2" />
+            <CarouselNext className="mx-2" />
+          </div>
+        </Carousel>
       </div>
     </div>
   );
