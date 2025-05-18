@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Brush, 
   Car, 
-  Shower, 
+  Bath, 
   Lightbulb, 
   Shirt, 
   Trash2, 
@@ -18,7 +18,7 @@ import { Service } from '@/lib/api';
 const iconMap: Record<string, React.ReactNode> = {
   'broom': <Brush className="h-6 w-6" />,
   'car': <Car className="h-6 w-6" />,
-  'shower-head': <Shower className="h-6 w-6" />,
+  'shower-head': <Bath className="h-6 w-6" />,
   'lamp-desk': <Lightbulb className="h-6 w-6" />,
   'washing-machine': <Shirt className="h-6 w-6" />,
   'trash': <Trash2 className="h-6 w-6" />,
