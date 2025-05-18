@@ -1,27 +1,39 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   Menu, 
   X, 
   User, 
-  LogIn 
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // For demo purposes
+  const { user, logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -54,18 +66,36 @@ export default function Navbar() {
           )}
           
           <div className="flex items-center space-x-2">
-            {isLoggedIn ? (
-              <Avatar>
-                <AvatarImage src="https://randomuser.me/api/portraits/women/32.jpg" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage src="https://randomuser.me/api/portraits/women/32.jpg" />
+                    <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">My Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/bookings" className="cursor-pointer">My Bookings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    <LogOut className="h-4 w-4 mr-2" /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex space-x-2">
-                <Button variant="outline" size="sm" onClick={handleLogin}>
+                <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
                   <LogIn className="h-4 w-4 mr-2" />
                   Login
                 </Button>
-                <Button size="sm" className="bg-brand-blue hover:bg-brand-blue/90">
+                <Button size="sm" className="bg-brand-blue hover:bg-brand-blue/90" onClick={() => navigate('/register')}>
                   <User className="h-4 w-4 mr-2" />
                   Sign Up
                 </Button>
@@ -105,6 +135,20 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}>
               About
             </Link>
+            {!isAuthenticated && (
+              <>
+                <Link to="/login"
+                  className="block px-3 py-2 text-base font-medium hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsOpen(false)}>
+                  Login
+                </Link>
+                <Link to="/register"
+                  className="block px-3 py-2 text-base font-medium hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsOpen(false)}>
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

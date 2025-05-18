@@ -39,6 +39,7 @@ export interface Booking {
     };
   };
   price: string;
+  paymentMethod: "online" | "cod";
 }
 
 // Mock Services Data
@@ -49,7 +50,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Cleaning",
       description: "Professional home cleaning services",
       icon: "broom",
-      price: "From $20/hr",
+      price: "From ₹999/hr",
       rating: 4.8
     },
     {
@@ -57,7 +58,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Cooking",
       description: "Skilled chefs for all your cooking needs",
       icon: "cooking-pot",
-      price: "From $25/hr",
+      price: "From ₹1200/hr",
       rating: 4.7
     },
     {
@@ -65,7 +66,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Driver",
       description: "Professional drivers for all your needs",
       icon: "car",
-      price: "From $18/hr",
+      price: "From ₹800/hr",
       rating: 4.5
     },
     {
@@ -73,7 +74,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Plumbing",
       description: "Expert plumbers for any plumbing issue",
       icon: "shower-head",
-      price: "From $35/hr",
+      price: "From ₹1500/hr",
       rating: 4.9
     },
     {
@@ -81,7 +82,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Electrical",
       description: "Skilled electricians at your service",
       icon: "lamp-desk",
-      price: "From $40/hr",
+      price: "From ₹1800/hr",
       rating: 4.8
     },
     {
@@ -89,7 +90,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Helper",
       description: "General assistance for various tasks",
       icon: "hand-helping",
-      price: "From $15/hr",
+      price: "From ₹600/hr",
       rating: 4.6
     },
     {
@@ -97,7 +98,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Dusting",
       description: "Thorough dusting and cleaning services",
       icon: "trash",
-      price: "From $18/hr",
+      price: "From ₹800/hr",
       rating: 4.5
     },
     {
@@ -105,7 +106,7 @@ export const getServices = async (): Promise<Service[]> => {
       name: "Laundry",
       description: "Professional laundry and ironing services",
       icon: "washing-machine",
-      price: "From $22/hr",
+      price: "From ₹1000/hr",
       rating: 4.7
     }
   ];
@@ -117,35 +118,35 @@ export const getServiceProviders = async (serviceId: string): Promise<ServicePro
   return [
     {
       id: "1",
-      name: "Alex Johnson",
+      name: "Rajesh Kumar",
       service: "Cleaning",
       rating: 4.8,
       reviews: 124,
       image: "https://randomuser.me/api/portraits/men/32.jpg",
-      price: "$22/hr",
-      location: "Downtown",
+      price: "₹999/hr",
+      location: "Delhi NCR",
       available: true
     },
     {
       id: "2",
-      name: "Maria Garcia",
+      name: "Priya Sharma",
       service: "Cleaning",
       rating: 4.9,
       reviews: 89,
       image: "https://randomuser.me/api/portraits/women/44.jpg",
-      price: "$25/hr",
-      location: "Westside",
+      price: "₹1200/hr",
+      location: "Mumbai",
       available: true
     },
     {
       id: "3",
-      name: "James Smith",
+      name: "Amit Singh",
       service: "Cleaning",
       rating: 4.7,
       reviews: 56,
       image: "https://randomuser.me/api/portraits/men/56.jpg",
-      price: "$20/hr",
-      location: "Northside",
+      price: "₹850/hr",
+      location: "Bangalore",
       available: false
     }
   ];
@@ -156,10 +157,11 @@ export const bookService = async (
   serviceId: string,
   providerId: string,
   date: Date,
-  address: string
+  address: string,
+  paymentMethod: 'online' | 'cod' = 'online'
 ): Promise<boolean> => {
   // In a real app, this would make an API call to create a booking
-  console.log("Booking service:", { serviceId, providerId, date, address });
+  console.log("Booking service:", { serviceId, providerId, date, address, paymentMethod });
   
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -168,6 +170,12 @@ export const bookService = async (
   const success = Math.random() > 0.1;
   
   if (success) {
+    if (paymentMethod === 'online') {
+      // Here we would normally redirect to a payment gateway
+      toast.success("Redirecting to payment gateway...");
+      // Simulate payment process
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
     toast.success("Booking confirmed! Check your bookings for details.");
   } else {
     toast.error("Booking failed. Please try again.");
@@ -181,8 +189,8 @@ export const getProviderLocation = async (bookingId: string): Promise<{lat: numb
   // This would normally fetch the current location from a real-time database
   // For demo, we'll return a location near the destination with some randomness
   return {
-    lat: 40.7128 + (Math.random() * 0.01),
-    lng: -74.006 + (Math.random() * 0.01)
+    lat: 28.6139 + (Math.random() * 0.01), // Delhi coordinates
+    lng: 77.2090 + (Math.random() * 0.01)
   };
 };
 
@@ -217,13 +225,79 @@ export const sendChatMessage = async (message: string): Promise<string> => {
   // Simple chatbot responses
   if (message.toLowerCase().includes("hello") || message.toLowerCase().includes("hi")) {
     return "Hello! How can I help you with our home services today?";
-  } else if (message.toLowerCase().includes("price") || message.toLowerCase().includes("cost")) {
-    return "Our service prices start from $15/hour for helpers to $40/hour for specialized services like electrical work. You can see specific pricing on each service page.";
+  } else if (message.toLowerCase().includes("price") || message.toLowerCase().includes("cost") || message.toLowerCase().includes("rate")) {
+    return "Our service prices start from ₹600/hour for helpers to ₹1800/hour for specialized services like electrical work. You can see specific pricing on each service page.";
   } else if (message.toLowerCase().includes("booking") || message.toLowerCase().includes("book")) {
-    return "To book a service, simply browse our service categories, select a provider, and choose your preferred time. It's quick and easy!";
+    return "To book a service, simply browse our service categories, select a provider, and choose your preferred time. You can pay online or via cash on delivery!";
   } else if (message.toLowerCase().includes("cancel")) {
     return "You can cancel a booking up to 2 hours before the scheduled time without any charges. Please go to 'My Bookings' to cancel.";
+  } else if (message.toLowerCase().includes("payment") || message.toLowerCase().includes("pay")) {
+    return "We accept both online payments and cash on delivery. You can choose your preferred payment method during checkout.";
+  } else if (message.toLowerCase().includes("cash") || message.toLowerCase().includes("cod")) {
+    return "Yes, we do offer cash on delivery option for all our services. You can select this option at checkout.";
   } else {
     return "Thanks for your message! Our team will help you with your query. In the meantime, feel free to browse our services or check our FAQ section.";
   }
+};
+
+// Login user
+export const loginUser = async (email: string, password: string): Promise<boolean> => {
+  // In a real app, this would authenticate against a backend
+  console.log("Logging in user:", { email });
+  
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+  // Simple validation
+  if (!email || !password) {
+    toast.error("Please enter both email and password");
+    return false;
+  }
+  
+  // Demo authentication - in real app this would check against a database
+  if (email === "demo@example.com" && password === "password") {
+    toast.success("Login successful!");
+    localStorage.setItem("user", JSON.stringify({ email, name: "Demo User" }));
+    return true;
+  }
+  
+  toast.error("Invalid email or password");
+  return false;
+};
+
+// Register user
+export const registerUser = async (name: string, email: string, password: string, mobile: string): Promise<boolean> => {
+  // In a real app, this would register a user in the database
+  console.log("Registering user:", { name, email, mobile });
+  
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  
+  // Simple validation
+  if (!name || !email || !password || !mobile) {
+    toast.error("Please fill all required fields");
+    return false;
+  }
+  
+  // Check if mobile is 10 digits (India format)
+  if (!/^\d{10}$/.test(mobile)) {
+    toast.error("Please enter a valid 10-digit mobile number");
+    return false;
+  }
+  
+  // Demo registration - in real app this would save to a database
+  toast.success("Registration successful! You can now login.");
+  return true;
+};
+
+// Logout user
+export const logoutUser = (): void => {
+  localStorage.removeItem("user");
+  toast.success("Logged out successfully");
+};
+
+// Get current user
+export const getCurrentUser = (): { email: string, name: string } | null => {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
 };

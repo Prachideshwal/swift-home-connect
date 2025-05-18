@@ -24,6 +24,7 @@ export default function ServiceDetail() {
   const [address, setAddress] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [bookingComplete, setBookingComplete] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
   
   useEffect(() => {
     const loadServiceAndProviders = async () => {
@@ -56,7 +57,7 @@ export default function ServiceDetail() {
     setIsBooking(true);
     
     try {
-      const result = await bookService(service.id, selectedProvider, date, address);
+      const result = await bookService(service.id, selectedProvider, date, address, paymentMethod);
       
       if (result) {
         setBookingComplete(true);
@@ -124,6 +125,9 @@ export default function ServiceDetail() {
           <h1 className="text-3xl font-bold mb-4">Booking Confirmed!</h1>
           <p className="mb-6 text-gray-600 text-lg">
             Your {service.name} service has been booked successfully.
+          </p>
+          <p className="mb-2 text-gray-600">
+            Payment Method: {paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
           </p>
           <p className="mb-10 text-gray-600">
             You will be redirected to your booking details page...
@@ -233,7 +237,7 @@ export default function ServiceDetail() {
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-1">
                               <h3 className="font-medium">{provider.name}</h3>
-                              <p className="font-semibold">{provider.price}</p>
+                              <p className="font-semibold">₹{provider.price.replace('$', '')}</p>
                             </div>
                             <div className="flex items-center text-sm mb-1">
                               <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
@@ -287,6 +291,20 @@ export default function ServiceDetail() {
                         onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
+
+                    <div className="space-y-2">
+                      <Label>Payment Method</Label>
+                      <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'online' | 'cod')}>
+                        <div className="flex items-center space-x-2 border p-3 rounded-md">
+                          <RadioGroupItem value="online" id="payment-online" />
+                          <Label htmlFor="payment-online" className="cursor-pointer">Online Payment</Label>
+                        </div>
+                        <div className="flex items-center space-x-2 border p-3 rounded-md">
+                          <RadioGroupItem value="cod" id="payment-cod" />
+                          <Label htmlFor="payment-cod" className="cursor-pointer">Cash on Delivery</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
                     
                     <Button 
                       className="w-full bg-brand-blue hover:bg-brand-blue/90" 
@@ -304,7 +322,7 @@ export default function ServiceDetail() {
                     </Button>
                     
                     <div className="text-center text-sm text-gray-500">
-                      <p>Starting from {service.price}</p>
+                      <p>Starting from ₹{service.price.replace('$', '')}</p>
                       <p className="mt-1">Free cancellation up to 2 hours before</p>
                     </div>
                   </div>
