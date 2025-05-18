@@ -1,14 +1,14 @@
 
 import { Link } from 'react-router-dom';
 import { 
-  Broom, 
+  Brush, 
   Car, 
-  ShowerHead, 
-  LampDesk, 
-  WashingMachine, 
-  Trash, 
-  User,
-  CookingPot
+  Shower, 
+  Lightbulb, 
+  Shirt, 
+  Trash2, 
+  MessagesSquare,
+  ChefHat
 } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,14 +16,14 @@ import { Service } from '@/lib/api';
 
 // Map service names to icons
 const iconMap: Record<string, React.ReactNode> = {
-  'broom': <Broom className="h-6 w-6" />,
+  'broom': <Brush className="h-6 w-6" />,
   'car': <Car className="h-6 w-6" />,
-  'shower-head': <ShowerHead className="h-6 w-6" />,
-  'lamp-desk': <LampDesk className="h-6 w-6" />,
-  'washing-machine': <WashingMachine className="h-6 w-6" />,
-  'trash': <Trash className="h-6 w-6" />,
-  'hand-helping': <User className="h-6 w-6" />,
-  'cooking-pot': <CookingPot className="h-6 w-6" />,
+  'shower-head': <Shower className="h-6 w-6" />,
+  'lamp-desk': <Lightbulb className="h-6 w-6" />,
+  'washing-machine': <Shirt className="h-6 w-6" />,
+  'trash': <Trash2 className="h-6 w-6" />,
+  'hand-helping': <MessagesSquare className="h-6 w-6" />,
+  'cooking-pot': <ChefHat className="h-6 w-6" />,
 };
 
 interface ServiceCardProps {
