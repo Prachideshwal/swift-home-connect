@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -60,6 +60,22 @@ export default function FeaturedCarousel() {
     );
   }
   
+  // Image placeholders based on service type
+  const getServiceImage = (service: Service) => {
+    const images = {
+      "Cleaning": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      "Cooking": "https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-4.0.3",
+      "Driver": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?ixlib=rb-4.0.3",
+      "Plumbing": "https://images.unsplash.com/photo-1603251578711-3290ca1a0187?ixlib=rb-4.0.3",
+      "Electrical": "https://images.unsplash.com/photo-1621905251918-48416bd8575a?ixlib=rb-4.0.3",
+      "Helper": "https://images.unsplash.com/photo-1590649632971-184a95e955c9?ixlib=rb-4.0.3",
+      "Dusting": "https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-4.0.3",
+      "Laundry": "https://images.unsplash.com/photo-1545173168-9f1947eebb7f?ixlib=rb-4.0.3"
+    };
+    
+    return images[service.name as keyof typeof images] || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3";
+  };
+
   return (
     <Carousel
       opts={{
@@ -76,7 +92,7 @@ export default function FeaturedCarousel() {
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-48">
                     <img 
-                      src={service.imageUrl || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3'} 
+                      src={getServiceImage(service)} 
                       alt={service.name} 
                       className="w-full h-full object-cover"
                     />

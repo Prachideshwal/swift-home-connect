@@ -9,10 +9,13 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useEffect, useRef } from 'react';
 
 export default function Banner() {
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselApi = useRef<any>(null);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +30,21 @@ export default function Banner() {
     "Carpentry",
     "AC Repair"
   ];
+
+  // Autoplay logic
+  useEffect(() => {
+    if (!carouselApi.current) return;
+    
+    const interval = setInterval(() => {
+      if (currentSlide === serviceCategories.length - 1) {
+        carouselApi.current?.scrollTo(0);
+      } else {
+        carouselApi.current?.next();
+      }
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [currentSlide, serviceCategories.length]);
   
   return (
     <div className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 py-16 md:py-24">
@@ -45,9 +63,7 @@ export default function Banner() {
                   duration: 10
                 }}
                 className="w-full"
-                autoplay={true}
-                loop={true}
-                interval={3000}
+                setApi={(api) => (carouselApi.current = api)}
               >
                 <CarouselContent>
                   {serviceCategories.map((category, i) => (
