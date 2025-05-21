@@ -86,9 +86,9 @@ export default function FeaturedCarousel() {
     >
       <CarouselContent>
         {services.map((service) => (
-          <CarouselItem key={service.id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+          <CarouselItem key={service._id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
             <div className="p-1">
-              <Link to={`/service/${service.id}`}>
+              <Link to={`/services/${service._id}`}>
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-48">
                     <img 

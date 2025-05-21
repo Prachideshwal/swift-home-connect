@@ -150,6 +150,30 @@ export const sendChatMessage = async (message) => {
   }
 };
 
+// Stripe payment integration
+export const createStripeCheckout = async (bookingData) => {
+  console.log("Creating Stripe checkout session:", bookingData);
+  
+  try {
+    // In a real app, this would make an API call to your backend
+    // For demo purposes, we'll simulate a successful response
+    
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    // Format price for Stripe (remove commas, convert to cents)
+    const priceInPaise = Math.round(parseFloat(bookingData.price.replace(/,/g, '')) * 100);
+    
+    // Mock Stripe checkout URL
+    return {
+      url: `https://checkout.stripe.com/pay/cs_test_a1${Math.random().toString(36).substring(2, 15)}?amount=${priceInPaise}&currency=inr`
+    };
+  } catch (error) {
+    console.error("Error creating Stripe checkout:", error);
+    return null;
+  }
+};
+
 // Simulated provider location for tracking
 export const getProviderLocation = async (bookingId) => {
   // This would normally fetch from the backend

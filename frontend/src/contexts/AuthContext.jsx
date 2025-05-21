@@ -1,65 +1,63 @@
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import { getCurrentUser, loginUser, registerUser, logoutUser } from '@/lib/api';
-import { toast } from '@/components/ui/sonner';
+import { createContext, useState, useEffect, useContext } from 'react';
+import { loginUser as apiLoginUser, registerUser as apiRegisterUser, logoutUser as apiLogoutUser, getCurrentUser } from '@/lib/api';
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is already logged in
-    const currentUser = getCurrentUser();
-    setUser(currentUser);
+    const storedUser = getCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
+    }
     setIsLoading(false);
   }, []);
 
+  // Login user
   const login = async (email, password) => {
-    const success = await loginUser(email, password);
-    if (success) {
-      setUser(getCurrentUser());
+    setIsLoading(true);
+    try {
+      const success = await apiLoginUser(email, password);
+      if (success) {
+        const userInfo = getCurrentUser();
+        setUser(userInfo);
+      }
+      setIsLoading(false);
+      return success;
+    } catch (error) {
+      setIsLoading(false);
+      return false;
     }
-    return success;
   };
 
+  // Register user
   const register = async (name, email, password, mobile) => {
-    const success = await registerUser(name, email, password, mobile);
-    if (success) {
-      // Auto login after successful registration
-      localStorage.setItem("user", JSON.stringify({ email, name }));
-      setUser({ email, name });
+    setIsLoading(true);
+    try {
+      const success = await apiRegisterUser(name, email, password, mobile);
+      setIsLoading(false);
+      return success;
+    } catch (error) {
+      setIsLoading(false);
+      return false;
     }
-    return success;
   };
 
+  // Logout user
   const logout = () => {
-    logoutUser();
+    apiLogoutUser();
     setUser(null);
-    toast.success("Logged out successfully");
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoading,
-        login,
-        register,
-        logout,
-        isAuthenticated: !!user,
-      }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
