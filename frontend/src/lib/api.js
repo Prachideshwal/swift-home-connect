@@ -60,11 +60,15 @@ export const getServiceProviders = async (serviceId) => {
 // User registration
 export const registerUser = async (name, email, password, mobile) => {
   try {
-    await apiRequest('/register', 'POST', { name, email, password, mobile });
+    const response = await apiRequest('/register', 'POST', { name, email, password, mobile });
     
-    // Auto login after registration
-    localStorage.setItem("user", JSON.stringify({ email, name }));
-    return true;
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      return true;
+    }
+    
+    return false;
   } catch (error) {
     console.error("Registration error:", error);
     return false;
